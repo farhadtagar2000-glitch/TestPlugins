@@ -1,0 +1,23 @@
+[
+    {
+        "iconUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Korduene_Logo.png",
+        "fileHash": "sha256-e2ab5cd9357943ca802c090726e1a9cd32926b9a21fa195128b143d459d7cbdb",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/farhadtagar2000-glitch/TestPlugins",
+        "fileSize": 40862,
+        "status": 1,
+        "language": "en",
+        "authors": [
+            "Waqartagar"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries"
+        ],
+        "version": 10,
+        "internalName": "ExampleProvider",
+        "description": "TAGAR plugin for movies and series",
+        "url": "https://raw.githubusercontent.com/farhadtagar2000-glitch/TestPlugins/builds/ExampleProvider.cs3",
+        "name": "ExampleProvider"
+    }
+]
