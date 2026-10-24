@@ -36,6 +36,8 @@ jobs:
           java-version: 17
 
       - name: Build Plugins
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
         run: |
           cd $GITHUB_WORKSPACE/src
           chmod +x gradlew
