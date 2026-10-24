@@ -1,0 +1,8 @@
+{
+  "name": "My Plugins",
+  "description": "Movies and series plugins",
+  "manifestVersion": 1,
+  "pluginLists": [
+    "https://raw.githubusercontent.com/farhadtagar2000-glitch/TestPlugins/builds/plugins.json"
+  ]
+}
