@@ -47,6 +47,7 @@ class ExampleProvider : MainAPI() {
     }
 
     override suspend fun load(url: String): LoadResponse? {
+        val url = url.removePrefix("https://archive.org/").trim('/')
         val meta = app.get("https://archive.org/metadata/$url").parsedSafe<IaMeta>()
             ?: return null
         val title = meta.metadata?.title ?: url
