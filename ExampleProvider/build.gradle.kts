@@ -4,10 +4,10 @@ dependencies {
 }
 
 // Use an integer for version numbers
-version = 2
+version = 3
 
 cloudstream {
-    description = "My movies and series plugin"
+    description = "TAGAR plugin for movies and series"
     authors = listOf("Waqartagar")
 
     status = 1
