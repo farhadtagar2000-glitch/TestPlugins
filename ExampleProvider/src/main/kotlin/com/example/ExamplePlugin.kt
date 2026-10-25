@@ -15,6 +15,7 @@ class ExamplePlugin: Plugin() {
         // All providers should be added in this manner
         registerMainAPI(ExampleProvider())
         registerMainAPI(YouTubeProvider())
+        registerMainAPI(DailymotionProvider())
 
         openSettings = {
             val frag = BlankFragment(this)
