@@ -16,6 +16,12 @@ class YouTubeProvider : MainAPI() {
 
     private val handles = listOf("@ShemarooMovies", "@tipsofficial")
 
+    private val invidious = listOf(
+        "https://inv.nadeko.net",
+        "https://invidious.nerdvpn.de",
+        "https://yewtu.be"
+    )
+
     override val mainPage =
         mainPageOf(*handles.map { it to it }.toTypedArray())
 
@@ -85,14 +91,59 @@ class YouTubeProvider : MainAPI() {
         callback: (ExtractorLink) -> Unit
     ): Boolean {
         val id = data.substringAfter("v=").substringBefore("&")
-        YoutubeExtractor().getUrl(
-            "https://www.youtube.com/watch?v=$id",
-            null,
-            subtitleCallback,
-            callback
-        )
-        return true
+        var found = false
+
+        try {
+            YoutubeExtractor().getUrl(
+                "https://www.youtube.com/watch?v=$id",
+                null,
+                subtitleCallback
+            ) {
+                found = true
+                callback(it)
+            }
+        } catch (e: Exception) {
+        }
+        if (found) return true
+
+        for (host in invidious) {
+            try {
+                val res = app.get("$host/api/v1/videos/$id", timeout = 20).parsed<InvVideo>()
+                val hls = res.hlsUrl
+                if (!hls.isNullOrBlank()) {
+                    callback(
+                        newExtractorLink(name, "Invidious HLS", hls, ExtractorLinkType.M3U8) {
+                            this.referer = host
+                            this.quality = Qualities.Unknown.value
+                        }
+                    )
+                    found = true
+                }
+                res.formatStreams.orEmpty().forEach { f ->
+                    val u = f.url ?: return@forEach
+                    callback(
+                        newExtractorLink(name, "Invidious " + (f.qualityLabel ?: "video"), u) {
+                            this.referer = host
+                            this.quality = getQualityFromName(f.qualityLabel)
+                        }
+                    )
+                    found = true
+                }
+                if (found) return true
+            } catch (e: Exception) {
+            }
+        }
+        return found
     }
+
+    data class InvVideo(
+        val hlsUrl: String? = null,
+        val formatStreams: List<InvFormat>? = null
+    )
+    data class InvFormat(
+        val url: String? = null,
+        val qualityLabel: String? = null
+    )
 
     data class ChannelResp(val items: List<ChItem>? = null)
     data class ChItem(val contentDetails: CD? = null)
