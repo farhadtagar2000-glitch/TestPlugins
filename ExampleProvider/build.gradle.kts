@@ -23,6 +23,7 @@ cloudstream {
 android {
     defaultConfig {
         buildConfigField("String", "TMDB_API_KEY", "\"${System.getenv("TMDB_API_KEY") ?: ""}\"")
+buildConfigField("String", "YOUTUBE_API_KEY", "\"${System.getenv("YOUTUBE_API_KEY") ?: ""}\"")
     }
     buildFeatures {
         buildConfig = true
