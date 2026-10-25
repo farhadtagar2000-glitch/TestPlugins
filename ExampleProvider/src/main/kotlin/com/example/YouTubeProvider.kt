@@ -65,7 +65,7 @@ class YouTubeProvider : MainAPI() {
     ): Boolean {
         val id = data.substringAfter("v=")
         return loadExtractor(
-            "https://youtube.com/watch?v=" + id,
+            "https://www.youtube.com/watch?v=" + id,
             subtitleCallback,
             callback
         )
