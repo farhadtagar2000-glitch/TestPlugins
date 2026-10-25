@@ -39,7 +39,7 @@ class YouTubeProvider : MainAPI() {
         val vidUrl = "$api/videos?part=snippet,contentDetails&id=$ids&key=$key"
         val vids = app.get(vidUrl).parsed<VideoResp>()
         val list = vids.items.orEmpty()
-            .filter { toSeconds(it.contentDetails?.duration) >= 2400 }
+            .filter { toSeconds(it.contentDetails?.duration) >= 4800 }
             .mapNotNull { toResult(it) }
         return newHomePageResponse(request.name, list)
     }
@@ -58,19 +58,21 @@ class YouTubeProvider : MainAPI() {
         val id = item.id ?: return null
         val title = item.snippet?.title ?: return null
         val poster = item.snippet.thumbnails?.high?.url
-        return newMovieSearchResponse(title, id, TvType.Movie) {
+        val link = "https://www.youtube.com/watch?v=$id"
+        return newMovieSearchResponse(title, link, TvType.Movie) {
             this.posterUrl = poster
         }
     }
 
     override suspend fun load(url: String): LoadResponse {
-        val id = url.substringAfter("v=")
+        val id = url.substringAfter("v=").substringBefore("&")
+        val link = "https://www.youtube.com/watch?v=$id"
         val s = app.get("$api/videos?part=snippet&id=$id&key=$key")
             .parsed<VideoResp>().items?.firstOrNull()?.snippet
         val title = s?.title ?: "Video"
         val poster = s?.thumbnails?.high?.url
         val desc = s?.description
-        return newMovieLoadResponse(title, id, TvType.Movie, id) {
+        return newMovieLoadResponse(title, link, TvType.Movie, link) {
             this.posterUrl = poster
             this.plot = desc
         }
@@ -82,7 +84,7 @@ class YouTubeProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        val id = data.substringAfter("v=")
+        val id = data.substringAfter("v=").substringBefore("&")
         YoutubeExtractor().getUrl(
             "https://www.youtube.com/watch?v=$id",
             null,
