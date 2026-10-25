@@ -4,7 +4,7 @@ dependencies {
 }
 
 // Use an integer for version numbers
-version = 7
+version = 8
 
 cloudstream {
     description = "TAGAR plugin for movies and series"
