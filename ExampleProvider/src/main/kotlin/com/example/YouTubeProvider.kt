@@ -62,7 +62,14 @@ class YouTubeProvider : MainAPI() {
         isCasting: Boolean,
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
-    ): Boolean = loadExtractor(data, subtitleCallback, callback)
+    ): Boolean {
+        val id = data.substringAfter("v=")
+        return loadExtractor(
+            "https://youtube.com/watch?v=" + id,
+            subtitleCallback,
+            callback
+        )
+    }
 
     data class ChannelResp(val items: List<ChItem>? = null)
     data class ChItem(val contentDetails: CD? = null)
